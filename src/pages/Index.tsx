@@ -1,21 +1,47 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { DailySavingsCard } from "@/components/DailySavingsCard";
 import { BillsList } from "@/components/BillsList";
 import { AchievementsBadges } from "@/components/AchievementsBadges";
 import { Leaderboard } from "@/components/Leaderboard";
+import { WelcomeOnboarding } from "@/components/WelcomeOnboarding";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 
-const Index = () => {
-  const [streak, setStreak] = useState(7);
+interface Bill {
+  id: string;
+  name: string;
+  amount: number;
+  dueDate: string;
+  paid: number;
+}
 
-  // Mock data
-  const bills = [
-    { id: "1", name: "Rent", amount: 1200, dueDate: "Nov 30", paid: 840 },
-    { id: "2", name: "Electric", amount: 150, dueDate: "Nov 25", paid: 75 },
-    { id: "3", name: "Internet", amount: 80, dueDate: "Nov 28", paid: 60 },
-    { id: "4", name: "Phone", amount: 65, dueDate: "Nov 22", paid: 40 },
-  ];
+const Index = () => {
+  const [hasCompletedOnboarding, setHasCompletedOnboarding] = useState(false);
+  const [bills, setBills] = useState<Bill[]>([]);
+  const [streak, setStreak] = useState(0);
+
+  useEffect(() => {
+    const savedBills = localStorage.getItem("billsaver-bills");
+    const savedStreak = localStorage.getItem("billsaver-streak");
+    const savedOnboarding = localStorage.getItem("billsaver-onboarding");
+
+    if (savedOnboarding && savedBills) {
+      setHasCompletedOnboarding(true);
+      setBills(JSON.parse(savedBills));
+      setStreak(savedStreak ? parseInt(savedStreak) : 0);
+    }
+  }, []);
+
+  const handleOnboardingComplete = (newBills: Bill[]) => {
+    setBills(newBills);
+    setHasCompletedOnboarding(true);
+    localStorage.setItem("billsaver-bills", JSON.stringify(newBills));
+    localStorage.setItem("billsaver-onboarding", "true");
+  };
+
+  if (!hasCompletedOnboarding) {
+    return <WelcomeOnboarding onComplete={handleOnboardingComplete} />;
+  }
 
   const totalMonthly = bills.reduce((sum, bill) => sum + bill.amount, 0);
   const dailyGoal = totalMonthly / 30;
@@ -74,7 +100,9 @@ const Index = () => {
   ];
 
   const handleSave = () => {
-    setStreak(streak + 1);
+    const newStreak = streak + 1;
+    setStreak(newStreak);
+    localStorage.setItem("billsaver-streak", newStreak.toString());
   };
 
   return (

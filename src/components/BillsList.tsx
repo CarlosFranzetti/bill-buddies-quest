@@ -26,7 +26,9 @@ export const BillsList = ({ bills }: BillsListProps) => {
                 <div className="flex items-center justify-between">
                   <div>
                     <h4 className="font-semibold">{bill.name}</h4>
-                    <p className="text-sm text-muted-foreground">Due: {bill.dueDate}</p>
+                    <p className="text-sm text-muted-foreground">
+                      Due: {new Date(bill.dueDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                    </p>
                   </div>
                   <div className="text-right">
                     <p className="font-semibold">${bill.amount.toFixed(2)}</p>
