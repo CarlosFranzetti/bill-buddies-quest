@@ -4,6 +4,7 @@ import { BillsList } from "@/components/BillsList";
 import { AchievementsBadges } from "@/components/AchievementsBadges";
 import { Leaderboard } from "@/components/Leaderboard";
 import { WelcomeOnboarding } from "@/components/WelcomeOnboarding";
+import { BillCharacter } from "@/components/BillCharacter";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 
@@ -107,13 +108,14 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <BillCharacter />
       <div className="container max-w-6xl mx-auto px-4 py-8">
         <header className="mb-8 text-center">
           <h1 className="text-3xl md:text-4xl mb-4 text-primary">
-            💰 BillSaver
+            💵 Bill's Quest
           </h1>
           <p className="text-sm md:text-base text-muted-foreground">
-            Save daily, earn achievements, and crush your bills!
+            Save daily, earn achievements, and conquer your bills!
           </p>
         </header>
 
