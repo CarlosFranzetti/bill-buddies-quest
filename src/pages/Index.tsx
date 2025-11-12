@@ -80,12 +80,12 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-background">
       <div className="container max-w-6xl mx-auto px-4 py-8">
-        <header className="mb-8">
-          <h1 className="text-4xl font-bold mb-2 bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
-            BillSaver
+        <header className="mb-8 text-center">
+          <h1 className="text-3xl md:text-4xl mb-4 text-primary">
+            💰 BillSaver
           </h1>
-          <p className="text-muted-foreground">
-            Save daily, earn achievements, and crush your bills! 💰
+          <p className="text-sm md:text-base text-muted-foreground">
+            Save daily, earn achievements, and crush your bills!
           </p>
         </header>
 
