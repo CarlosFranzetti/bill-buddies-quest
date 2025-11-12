@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -25,6 +25,10 @@ export const WelcomeOnboarding = ({ onComplete }: WelcomeOnboardingProps) => {
     amount: "",
     dueDate: "",
   });
+  
+  const nameInputRef = useRef<HTMLInputElement>(null);
+  const amountInputRef = useRef<HTMLInputElement>(null);
+  const dueDateInputRef = useRef<HTMLInputElement>(null);
 
   const handleAddBill = () => {
     if (!currentBill.name.trim()) {
@@ -51,6 +55,9 @@ export const WelcomeOnboarding = ({ onComplete }: WelcomeOnboardingProps) => {
     setBills([...bills, newBill]);
     setCurrentBill({ name: "", amount: "", dueDate: "" });
     toast.success(`${newBill.name} added!`);
+    
+    // Focus back to name input for next bill
+    setTimeout(() => nameInputRef.current?.focus(), 100);
   };
 
   const handleRemoveBill = (id: string) => {
@@ -81,66 +88,10 @@ export const WelcomeOnboarding = ({ onComplete }: WelcomeOnboardingProps) => {
           </div>
 
           <div className="space-y-4">
-            <div className="grid gap-4">
-              <div>
-                <Label htmlFor="billName" className="text-sm">Bill Name</Label>
-                <Input
-                  id="billName"
-                  placeholder="e.g., Rent, Electric, Internet"
-                  value={currentBill.name}
-                  onChange={(e) =>
-                    setCurrentBill({ ...currentBill, name: e.target.value })
-                  }
-                  onKeyPress={(e) => e.key === "Enter" && handleAddBill()}
-                  className="mt-1"
-                />
-              </div>
-
-              <div className="grid sm:grid-cols-2 gap-4">
-                <div>
-                  <Label htmlFor="amount" className="text-sm">Amount ($)</Label>
-                  <Input
-                    id="amount"
-                    type="number"
-                    step="0.01"
-                    placeholder="0.00"
-                    value={currentBill.amount}
-                    onChange={(e) =>
-                      setCurrentBill({ ...currentBill, amount: e.target.value })
-                    }
-                    onKeyPress={(e) => e.key === "Enter" && handleAddBill()}
-                    className="mt-1"
-                  />
-                </div>
-
-                <div>
-                  <Label htmlFor="dueDate" className="text-sm">Due Date</Label>
-                  <Input
-                    id="dueDate"
-                    type="date"
-                    value={currentBill.dueDate}
-                    onChange={(e) =>
-                      setCurrentBill({ ...currentBill, dueDate: e.target.value })
-                    }
-                    className="mt-1"
-                  />
-                </div>
-              </div>
-
-              <Button
-                onClick={handleAddBill}
-                variant="outline"
-                className="w-full"
-              >
-                <Plus className="mr-2 h-4 w-4" />
-                Add Bill
-              </Button>
-            </div>
-
             {bills.length > 0 && (
               <div className="space-y-2">
                 <h3 className="font-semibold text-sm">Your Bills:</h3>
-                <div className="space-y-2 max-h-48 overflow-y-auto">
+                <div className="space-y-2 max-h-64 overflow-y-auto pr-2">
                   {bills.map((bill) => (
                     <Card key={bill.id} className="p-3 flex items-center justify-between">
                       <div className="flex-1">
@@ -169,6 +120,81 @@ export const WelcomeOnboarding = ({ onComplete }: WelcomeOnboardingProps) => {
                 </div>
               </div>
             )}
+
+            <div className="grid gap-4">
+              <div>
+                <Label htmlFor="billName" className="text-sm">Bill Name</Label>
+                <Input
+                  ref={nameInputRef}
+                  id="billName"
+                  placeholder="e.g., Rent, Electric, Internet"
+                  value={currentBill.name}
+                  onChange={(e) =>
+                    setCurrentBill({ ...currentBill, name: e.target.value })
+                  }
+                  onKeyPress={(e) => {
+                    if (e.key === "Enter") {
+                      e.preventDefault();
+                      amountInputRef.current?.focus();
+                    }
+                  }}
+                  className="mt-1"
+                />
+              </div>
+
+              <div className="grid sm:grid-cols-2 gap-4">
+                <div>
+                  <Label htmlFor="amount" className="text-sm">Amount ($)</Label>
+                  <Input
+                    ref={amountInputRef}
+                    id="amount"
+                    type="number"
+                    step="0.01"
+                    placeholder="0.00"
+                    value={currentBill.amount}
+                    onChange={(e) =>
+                      setCurrentBill({ ...currentBill, amount: e.target.value })
+                    }
+                    onKeyPress={(e) => {
+                      if (e.key === "Enter") {
+                        e.preventDefault();
+                        dueDateInputRef.current?.focus();
+                      }
+                    }}
+                    className="mt-1"
+                  />
+                </div>
+
+                <div>
+                  <Label htmlFor="dueDate" className="text-sm">Due Date</Label>
+                  <Input
+                    ref={dueDateInputRef}
+                    id="dueDate"
+                    type="date"
+                    value={currentBill.dueDate}
+                    onChange={(e) =>
+                      setCurrentBill({ ...currentBill, dueDate: e.target.value })
+                    }
+                    onKeyPress={(e) => {
+                      if (e.key === "Enter") {
+                        e.preventDefault();
+                        handleAddBill();
+                      }
+                    }}
+                    className="mt-1"
+                  />
+                </div>
+              </div>
+
+              <Button
+                onClick={handleAddBill}
+                variant="outline"
+                className="w-full"
+              >
+                <Plus className="mr-2 h-4 w-4" />
+                Add Bill
+              </Button>
+            </div>
 
             {bills.length > 0 && (
               <Button
