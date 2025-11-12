@@ -72,10 +72,10 @@ export const WelcomeOnboarding = ({ onComplete }: WelcomeOnboardingProps) => {
         <div className="space-y-6">
           <div className="text-center space-y-3">
             <h1 className="text-3xl md:text-4xl text-primary">
-              💰 Welcome to BillSaver!
+              💵 Welcome to Bill's Quest!
             </h1>
             <p className="text-muted-foreground text-sm md:text-base">
-              Let's get started! Tell me about your monthly bills and I'll help you save for them daily. 
+              Hey there, adventurer! Tell me about your monthly bills and I'll help you save for them daily. 
               <span className="block mt-2">It's like a game - save daily, earn achievements, and level up! 🎮</span>
             </p>
           </div>
