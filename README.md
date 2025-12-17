@@ -1,4 +1,4 @@
-# Welcome to your Bill Buddies Quest
+# Welcome to Bill Buddies Quest
 
 ## Project info
 
