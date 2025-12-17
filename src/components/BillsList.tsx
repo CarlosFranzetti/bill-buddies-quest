@@ -38,7 +38,11 @@ export const BillsList = ({ bills }: BillsListProps) => {
                   </div>
                 </div>
                 <div className="space-y-1">
-                  <Progress value={progress} className="h-2" />
+                  <Progress
+                    value={progress}
+                    className="h-2"
+                    aria-label={`${progress.toFixed(0)}% saved for ${bill.name}`}
+                  />
                   <p className="text-xs text-muted-foreground text-right">
                     {progress.toFixed(0)}% complete
                   </p>
