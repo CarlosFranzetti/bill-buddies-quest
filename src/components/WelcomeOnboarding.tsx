@@ -3,6 +3,11 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { Plus, Trash2, ArrowRight } from "lucide-react";
 import { toast } from "sonner";
 
@@ -100,13 +105,21 @@ export const WelcomeOnboarding = ({ onComplete }: WelcomeOnboardingProps) => {
                           ${bill.amount.toFixed(2)} • Due {new Date(bill.dueDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
                         </p>
                       </div>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => handleRemoveBill(bill.id)}
-                      >
-                        <Trash2 className="h-4 w-4 text-destructive" />
-                      </Button>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => handleRemoveBill(bill.id)}
+                            aria-label={`Remove bill: ${bill.name}`}
+                          >
+                            <Trash2 className="h-4 w-4 text-destructive" />
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p>Remove {bill.name}</p>
+                        </TooltipContent>
+                      </Tooltip>
                     </Card>
                   ))}
                 </div>
@@ -132,7 +145,7 @@ export const WelcomeOnboarding = ({ onComplete }: WelcomeOnboardingProps) => {
                   onChange={(e) =>
                     setCurrentBill({ ...currentBill, name: e.target.value })
                   }
-                  onKeyPress={(e) => {
+                  onKeyDown={(e) => {
                     if (e.key === "Enter") {
                       e.preventDefault();
                       amountInputRef.current?.focus();
@@ -155,7 +168,7 @@ export const WelcomeOnboarding = ({ onComplete }: WelcomeOnboardingProps) => {
                     onChange={(e) =>
                       setCurrentBill({ ...currentBill, amount: e.target.value })
                     }
-                    onKeyPress={(e) => {
+                    onKeyDown={(e) => {
                       if (e.key === "Enter") {
                         e.preventDefault();
                         dueDateInputRef.current?.focus();
@@ -175,7 +188,7 @@ export const WelcomeOnboarding = ({ onComplete }: WelcomeOnboardingProps) => {
                     onChange={(e) =>
                       setCurrentBill({ ...currentBill, dueDate: e.target.value })
                     }
-                    onKeyPress={(e) => {
+                    onKeyDown={(e) => {
                       if (e.key === "Enter") {
                         e.preventDefault();
                         handleAddBill();
